@@ -64,6 +64,7 @@ function showResults() {
   document.getElementById("round-section").style.display = "none";
   document.getElementById("result-section").style.display = "block";
 
+<<<<<<< HEAD
   const resultList = document.getElementById("result-list");
   resultList.innerHTML = "";
 
@@ -77,20 +78,48 @@ function showResults() {
   });
 
   // Step 2: Populate debts from each round
+=======
+  // Matrix of who owes whom
+  const debt = {};
+  players.forEach(p => {
+    debt[p] = {};
+    players.forEach(q => {
+      if (p !== q) debt[p][q] = 0;
+    });
+  });
+
+  // Populate debts based on round results
+>>>>>>> 6e7cddf26c9f788a84c3242b5373d92db1a0ab41
   scores.forEach(round => {
     const winner = round.winner;
     players.forEach(player => {
       if (player !== winner) {
+<<<<<<< HEAD
         debts[player][winner] += round[player];
+=======
+        const amount = round[player];
+        debt[player][winner] += amount;
+>>>>>>> 6e7cddf26c9f788a84c3242b5373d92db1a0ab41
       }
     });
   });
 
+<<<<<<< HEAD
   // Step 3: Show who owes whom (no netting)
   players.forEach(from => {
     players.forEach(to => {
       if (from !== to && debts[from][to] > 0) {
         resultList.innerHTML += `<li>${from} owes ${to} ₹${debts[from][to]}</li>`;
+=======
+  // Build result message
+  const resultList = document.getElementById("result-list");
+  resultList.innerHTML = "";
+
+  players.forEach(from => {
+    players.forEach(to => {
+      if (from !== to && debt[from][to] > 0) {
+        resultList.innerHTML += `<li>${from} owes ${to} ₹${debt[from][to]}</li>`;
+>>>>>>> 6e7cddf26c9f788a84c3242b5373d92db1a0ab41
       }
     });
   });

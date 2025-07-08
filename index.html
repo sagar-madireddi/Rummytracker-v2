@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Rummy Score Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <h1>Rummy Score Tracker</h1>
+
+    <div id="setup-section">
+      <form id="setup-form" onsubmit="startGame(event)">
+        <label>Enter player names (one per line):</label><br>
+        <textarea id="players-input" rows="6" required></textarea><br>
+        <button type="submit">Start Game</button>
+      </form>
+    </div>
+
+    <div id="round-section" style="display: none;">
+      <h2 id="round-title"></h2>
+      <form id="score-form" onsubmit="submitRound(event)">
+        <div id="score-inputs"></div>
+        <button type="submit">Submit Round</button>
+      </form>
+    </div>
+
+    <div id="result-section" style="display: none;">
+      <h2>Final Results</h2>
+      <ul id="result-list"></ul>
+      <button onclick="resetGame()">Restart Game</button>
+    </div>
+
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+
