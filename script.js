@@ -48,11 +48,21 @@ function submitRound(event) {
   const round = {};
   const form = document.getElementById("score-form");
 
+  let winner = null;
   players.forEach(player => {
     const value = parseInt(form.elements[player].value);
     if (isNaN(value)) return alert("All scores must be numbers.");
     round[player] = value;
+    if (value === 0) winner = player;
   });
+
+  if (!winner) {
+    alert("One player must have a score of 0 (the winner).");
+    return;
+  }
+
+  round["dealer"] = players[currentRound]; // Dealer rotates
+  round["winner"] = winner;
 
   scores.push(round);
   currentRound++;
@@ -71,28 +81,28 @@ function showResults() {
   const net = {};
   players.forEach(p => net[p] = 0);
 
-  for (let i = 0; i < scores.length; i++) {
-    const round = scores[i];
-    const dealer = players[i];
-    const winner = players.find(p => round[p] === 0);
-
-    if (!winner) continue;
+  scores.forEach(round => {
+    const winner = round["winner"];
 
     players.forEach(player => {
       if (player !== winner) {
-        net[winner] += round[player];
-        net[player] -= round[player];
+        const score = round[player];
+        net[winner] += score;
+        net[player] -= score;
       }
     });
-  }
+  });
 
   const resultList = document.getElementById("result-list");
   resultList.innerHTML = "";
 
   players.forEach(player => {
-    resultList.innerHTML += `<li>${player} → Net Balance: ₹${net[player]}</li>`;
+    const amount = net[player];
+    const color = amount >= 0 ? "green" : "red";
+    resultList.innerHTML += `<li style="color:${color};">${player}: ₹${amount}</li>`;
   });
 }
+
 
 function resetGame() {
   players = [];
