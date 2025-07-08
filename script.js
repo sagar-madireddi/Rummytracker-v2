@@ -64,27 +64,39 @@ function showResults() {
   document.getElementById("round-section").style.display = "none";
   document.getElementById("result-section").style.display = "block";
 
-  const net = {};
-  players.forEach(p => net[p] = 0);
+  // Matrix of who owes whom
+  const debt = {};
+  players.forEach(p => {
+    debt[p] = {};
+    players.forEach(q => {
+      if (p !== q) debt[p][q] = 0;
+    });
+  });
 
+  // Populate debts based on round results
   scores.forEach(round => {
     const winner = round.winner;
     players.forEach(player => {
       if (player !== winner) {
-        const val = round[player];
-        net[winner] += val;
-        net[player] -= val;
+        const amount = round[player];
+        debt[player][winner] += amount;
       }
     });
   });
 
+  // Build result message
   const resultList = document.getElementById("result-list");
   resultList.innerHTML = "";
-  players.forEach(player => {
-    const color = net[player] >= 0 ? "green" : "red";
-    resultList.innerHTML += `<li style="color:${color};">${player}: ₹${net[player]}</li>`;
+
+  players.forEach(from => {
+    players.forEach(to => {
+      if (from !== to && debt[from][to] > 0) {
+        resultList.innerHTML += `<li>${from} owes ${to} ₹${debt[from][to]}</li>`;
+      }
+    });
   });
 }
+
 
 function resetGame() {
   players = [];
